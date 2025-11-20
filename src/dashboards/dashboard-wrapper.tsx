@@ -15,7 +15,7 @@ const DashboardWrapper = ({children, title, isError, isLoading, isSuccess}: Dash
     const [hidden, setHidden] = useState(true)
     return (
         <div className="my-2">
-            <div className={cn("flex w-full p-4 justify-between mb-2", {
+            <div className={cn("flex w-full p-4 justify-between mb-2 border-b-2 border-slate-300", {
                 "hover:bg-slate-200": isSuccess,
                 "shadow-xl": hidden,
                 "bg-slate-200": !hidden || isLoading
@@ -30,7 +30,7 @@ const DashboardWrapper = ({children, title, isError, isLoading, isSuccess}: Dash
                     {isLoading && <SpinnerIcon/>}
                     <p>{title}</p>
                 </div>
-                {isSuccess && <ArrowIcon up = {hidden}/>}
+                {isSuccess && <ArrowIcon up = {!hidden}/>}
             </div>
             <div className="px-4 w-full">
                 <div className="w-full border-l-2 px-8 border-slate-300">

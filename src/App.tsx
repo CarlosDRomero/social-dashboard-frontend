@@ -1,11 +1,8 @@
 import { useState } from "react";
-import axios from "axios";
 import ReactApexChart from "react-apexcharts";
 import { cn } from "./cn";
-import TickIcon from "./icons/tick";
-import CrossIcon from "./icons/cross";
-import SpinnerIcon from "./icons/spinner";
 import DashboardWrapper from "./dashboards/dashboard-wrapper";
+import FacebookDashboard from "./dashboards/facebook-dashboard";
 
 // ————————————————————————
 // Tipos de datos
@@ -20,25 +17,15 @@ interface FacebookStats {
 // Componente Principal
 // ————————————————————————
 
-const backendRoot = "http://localhost:5000"
-
-const fetchApi = async (api: string, search: string)  => {
-  const { data } = await axios.get(`${backendRoot}/${api}?q=${search}`)
-  return data
-}
-
 export default function App() {
   const [query, setQuery] = useState("");
-  const [stats, setStats] = useState<FacebookStats | null>(null);
-  const [loading, setLoading] = useState(false);
+
   const [hasSearch, setHasSearch] = useState(false)
-  // Simulación API
+  
 
 
   const fetchFacebookData = async (search: string) => {
-    setLoading(true);
     try {
-      // Aquí luego conectamos Meta Graph API
       // const response = await axios.get(`/api/facebook?query=${search}`);
 
       const fakeData: FacebookStats = {
@@ -47,11 +34,9 @@ export default function App() {
         reactions: Math.floor(Math.random() * 900),
       };
 
-      setStats(fakeData);
     } catch (err) {
       console.error("Error obteniendo datos:", err);
     } finally {
-      setLoading(false);
     }
   };
 
@@ -67,10 +52,13 @@ export default function App() {
     setQuery(v.toLowerCase().replaceAll(" ", ""))
   }
   return (
-    <div className={cn("w-full mx-auto p-6", {
-      "h-dvh flex justify-center items-center": !hasSearch
+    <div className={cn("w-full mx-auto p-6 transition-all", {
+      "h-dvh flex flex-col justify-center items-center": !hasSearch
     })}>
       {/* —————— Barra de búsqueda —————— */}
+      <h1 className={cn("font-bold text-5xl text-center my-5 transition-all", {
+        "text-2xl": hasSearch
+      })}>Bienvenido al SocialDashBoard 🔎</h1>
       <form
         onSubmit={handleSearch}
         className="flex justify-center mb-8 gap-3 h-14 w-full"
@@ -91,13 +79,12 @@ export default function App() {
         </button>
       </form>
 
-      {/* —————— Loading —————— */}
-      {loading && (
-        <p className="text-center text-gray-600 text-xl">Recopilando información, esto puede tomar varios minutos...</p>
-      )}
+      {hasSearch && <>
+        <FacebookDashboard search={query}/>
+      </>}
 
       {/* —————— Dashboard —————— */}
-      {!loading && stats && (
+      {!false && false && (
         <div className="space-y-12">
           <h2 className="text-2xl font-semibold text-center">
             Resultados para: <span className="text-blue-600">{query}</span>
