@@ -4,7 +4,7 @@ import './index.css'
 import App from './App.tsx'
 import { QueryClient, QueryClientProvider } from 'react-query'
 const queryClient = new QueryClient()
-
+document.title = "Social Dashboard"
 createRoot(document.getElementById('root')!).render(
   <QueryClientProvider client={queryClient}>
   <StrictMode>

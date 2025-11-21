@@ -11,16 +11,20 @@ interface DashboardWrapperProps extends PropsWithChildren {
     isError: boolean
     isLoading: boolean
 }
+export interface DashboardProps {
+  search: string
+}
+
 const DashboardWrapper = ({children, title, isError, isLoading, isSuccess}: DashboardWrapperProps)=>{
     const [hidden, setHidden] = useState(true)
     return (
-        <div className="my-2">
-            <div className={cn("flex w-full p-4 justify-between mb-2 border-b-2 border-slate-300", {
+        <div>
+            <div className={cn("flex w-full p-4 justify-between border-b-2 border-slate-300", {
                 "hover:bg-slate-200": isSuccess,
-                "shadow-xl": hidden,
+                "shadow-xl": !hidden,
                 "bg-slate-200": !hidden || isLoading
             })}
-                onClick={(e) => {if (isSuccess) setHidden(!hidden)}}
+                onClick={() => {if (isSuccess) setHidden(!hidden)}}
             >
                 <div className={cn("flex gap-x-4 font-bold text-lg", {
                     "text-gray-500": isLoading
@@ -32,13 +36,14 @@ const DashboardWrapper = ({children, title, isError, isLoading, isSuccess}: Dash
                 </div>
                 {isSuccess && <ArrowIcon up = {!hidden}/>}
             </div>
+            {!hidden &&
             <div className="px-4 w-full">
-                <div className="w-full border-l-2 px-8 border-slate-300">
-                    {!hidden && children}
+                <div className="w-full border-l-2 px-8 border-slate-300 py-10">
+                     {children}
 
                 </div>
 
-            </div>
+            </div>}
         </div>
     )
 

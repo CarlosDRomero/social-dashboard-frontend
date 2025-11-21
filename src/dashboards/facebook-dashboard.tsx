@@ -1,13 +1,12 @@
 import { useQuery } from "react-query"
-import DashboardWrapper from "./dashboard-wrapper"
+import DashboardWrapper, { type DashboardProps } from "./dashboard-wrapper"
 import { fetchApi } from "../services/fetch-api"
 
-interface FacebookDashboardProps {
-  search: string
+interface FacebookDashboardProps extends DashboardProps {
 }
 
 const FacebookDashboard = ({search}: FacebookDashboardProps) => {
-  const {isSuccess, isLoading, isError} = useQuery(["facebook"],{
+  const {isSuccess, isLoading, isError} = useQuery(["facebook", search],{
     queryFn: () => fetchApi("facebook", search),
     refetchOnWindowFocus: false
   })
