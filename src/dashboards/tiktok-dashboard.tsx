@@ -32,6 +32,7 @@ const TikTokDashboard = ({search}: TikTokDashboardProps) => {
           <header>
             <KPIs kpiMap={{
               "Cantidad de Posts": formatNumber(data.length, "es"),
+              "TikTok con más likes": <a className="underline hover:text-blue-400" href={data.filter(max => max.digg_count === Math.max(...data.map(p=>p.digg_count || 0)))[0].url}>{formatNumber(Math.max(...data.map(p=>p.digg_count || 0)), "es")}</a>,
               "Duracion promedio": `${
                 formatNumber(data.reduce((p, c) => p + (c.video_duration? c.video_duration : c.carousel_images.length * 5), 0) / data.length, "es")
               }s`,

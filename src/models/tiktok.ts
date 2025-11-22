@@ -7,4 +7,5 @@ export interface TikTokData {
   play_count: number
   video_duration?: number
   carousel_images: string[]
+  url: string
 }

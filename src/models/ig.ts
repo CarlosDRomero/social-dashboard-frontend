@@ -6,4 +6,5 @@ export interface IgData{
   videoPlayCount: number, 
   //Video visto completo
   videoViewCount: number
+  url: string
 }

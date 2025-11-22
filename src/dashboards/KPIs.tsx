@@ -1,5 +1,5 @@
 interface KPIsProps {
-    kpiMap: {[key: string]: string}
+    kpiMap: {[key: string]: any}
 }
 
 const KPIs = ({kpiMap}: KPIsProps)=> {
