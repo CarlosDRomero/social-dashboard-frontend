@@ -3,5 +3,4 @@ export interface RedditData {
   comments: number;
   reactions: number;
   publishedAt: string;
-
 }

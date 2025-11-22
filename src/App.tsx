@@ -4,6 +4,8 @@ import { cn } from "./cn";
 import DashboardWrapper from "./dashboards/dashboard-wrapper";
 import FacebookDashboard from "./dashboards/facebook-dashboard";
 import RedditDashboard from "./dashboards/reddit-dashboard";
+import TikTokDashboard from "./dashboards/tiktok-dashboard";
+import InstagramDashboard from "./dashboards/ig-dashboard";
 
 // ————————————————————————
 // Tipos de datos
@@ -72,6 +74,8 @@ export default function App() {
           Resultados para: <span className="text-blue-600">{liveQuery}</span>
         </h2>
         <FacebookDashboard search={query}/>
+        <TikTokDashboard search={query} />
+        <InstagramDashboard search={query} />
         <RedditDashboard search={query}/>
       </>}
 

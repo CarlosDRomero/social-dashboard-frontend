@@ -3,34 +3,33 @@ import DashboardWrapper, { type DashboardProps } from "./dashboard-wrapper"
 import { fetchApi } from "../services/fetch-api"
 import { formatNumber } from "chart.js/helpers"
 import KPIs from "./KPIs"
-import type { FacebookData } from "../models/facebook"
-import { extractTalkingAbout } from "./helpers"
+import type { IgData } from "../models/ig"
 import ReactApexChart from "react-apexcharts"
 
-interface FacebookDashboardProps extends DashboardProps {
+interface IgDashboardProps extends DashboardProps {
 }
 
-const FacebookDashboard = ({search}: FacebookDashboardProps) => {
-  const {isSuccess, isLoading, isError,data} = useQuery<FacebookData[]>(["facebook", search],{
-    queryFn: () => fetchApi("facebook", search),
+const InstagramDashboard = ({search}: IgDashboardProps) => {
+  const {isSuccess, isLoading, isError,data} = useQuery<IgData[]>(["instagram", search],{
+    queryFn: () => fetchApi("instagram", search),
     refetchOnWindowFocus: false
   })
   return (
-    <DashboardWrapper title="Facebook" isError = {isError} isLoading = {isLoading} isSuccess = {isSuccess}>
+    <DashboardWrapper title="Instagram" isError = {isError} isLoading = {isLoading} isSuccess = {isSuccess}>
       { data?.length &&
       <>
         <header>
         <KPIs kpiMap={{
           "Cantidad de Posts": formatNumber(data.length, "es"),
-          "Likes totales": formatNumber(data.reduce((p, c) => p + c.likes, 0), "es"),
-          "Likes promedio": formatNumber(data.reduce((p, c) => p + c.likes, 0) / data.length, "es"),
-          "Calificación general total": formatNumber(data.reduce((p, c) => p + (c.ratingOverall || 0) ,0), "es"),
-          "Calificación general promedio": formatNumber(data.reduce((p, c) => p + (c.ratingOverall || 0), 0) / data.length, "es"),
-          "Recuento de calificaciones total": formatNumber(data.reduce((p, c) => p + (c.ratingCount || 0), 0), "es"),
-          "Recuento de calificaciones promedio": formatNumber(data.reduce((p, c) => p + (c.ratingCount || 0), 0) / data.length, "es"),
-          "Comentarios": formatNumber(data.reduce((p, c) => p + extractTalkingAbout(c.info), 0), "es"),
-          "Comentarios promedio": formatNumber(data.reduce((p, c) => p + extractTalkingAbout(c.info), 0) / data.length, "es"),
-          "Post con más likes": formatNumber(Math.max(...data.map(p=>p.likes || 0)), "es"),
+          "Likes totales": formatNumber(data.reduce((p, c) => p + c.likesCount, 0), "es"),
+          "Likes promedio": formatNumber(data.reduce((p, c) => p + c.likesCount, 0) / data.length, "es"),
+          "Comentarios totales": formatNumber(data.reduce((p, c) => p + (c.commentsCount || 0) ,0), "es"),
+          "Comentarios totales promedio": formatNumber(data.reduce((p, c) => p + (c.commentsCount || 0), 0) / data.length, "es"),
+          "Duración total": formatNumber(data.reduce((p, c) => p + (c.videoDuration || 0), 0), "es"),
+          "Duración total promedio": formatNumber(data.reduce((p, c) => p + (c.videoDuration || 0), 0) / data.length, "es"),
+          "# de personas que empezó el video": formatNumber(data.reduce((p, c) => p + c.videoPlayCount, 0), "es"),
+          "# de personas que terminó el video": formatNumber(data.reduce((p, c) => p + c.videoViewCount, 0) / data.length, "es"),
+          "Reel con más likes": formatNumber(Math.max(...data.map(p=>p.likesCount || 0)), "es"),
           }}/>
       </header>
           <article className="*:my-4">
@@ -42,7 +41,7 @@ const FacebookDashboard = ({search}: FacebookDashboardProps) => {
               <ReactApexChart
                 type="donut"
                 height={350}
-                series={data.map(post => post.likes || 0)}
+                series={data.map(post => post.likesCount || 0)}
                 options={{
                   labels: data.map((post, index) => `${index + 1}`),
                   legend: { position: "bottom" },
@@ -63,7 +62,7 @@ const FacebookDashboard = ({search}: FacebookDashboardProps) => {
                 type="bar"
                 height={450}
                 series={[
-                  { name: "Comentarios", data: data.map(p => extractTalkingAbout(p.info)) }
+                  { name: "Comentarios", data: data.map(p => p.commentsCount) }
                 ]}
                 options={{
                   plotOptions: { bar: { horizontal: true } },
@@ -72,7 +71,7 @@ const FacebookDashboard = ({search}: FacebookDashboardProps) => {
               />
             </div>
             <h3 className="font-bold text-4xl w-full">
-              Rating por post
+              # de personas que empezaron el video
             </h3>
 
             <div className="bg-white p-6 rounded-2xl shadow-md">
@@ -80,7 +79,7 @@ const FacebookDashboard = ({search}: FacebookDashboardProps) => {
               type="line"
               height={350}
               series={[
-                { name: "Rating Count", data: data.map(p => p.ratingCount || 0) },
+                { name: "Rating Count", data: data.map(p => p.videoPlayCount || 0) },
               ]}
               options={{
                 stroke: { curve: "smooth" },
@@ -95,4 +94,4 @@ const FacebookDashboard = ({search}: FacebookDashboardProps) => {
   )
 }
 
-export default FacebookDashboard
+export default InstagramDashboard
